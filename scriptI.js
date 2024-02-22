@@ -1,13 +1,11 @@
 let preguntas = [];
 let misRespuestas = Array.from({ length: 10 });
 
-document.addEventListener("DOMContentLoaded", function(){
+document.addEventListener("DOMContentLoaded", function () {
     let token = sessionStorage.getItem("token");
+
     if (!token) {
         generarToken();
-    } else {
-        console.log("token encontrado: ", token);
-        obtenerPreguntas();
     }
 });
 
@@ -21,13 +19,12 @@ const generarToken = () => {
         .then(datos => {
             if (datos.token) {
                 sessionStorage.setItem("token", datos.token);
-                obtenerPreguntas();
             }
         })
         .catch(error => {
             console.error("Hubo un error generado por el token: ", error);
         });
-}
+};
 
 const obtenerPreguntas = () => {
     let token = sessionStorage.getItem("token");
@@ -45,25 +42,27 @@ const obtenerPreguntas = () => {
                 .then(respuesta => respuesta.json())
                 .then(datos => {
                     if (datos.results.length > 0) {
-                        datos.results.forEach(preguntaAPI => {
+                        datos.results.map(preguntaAPI => {
                             preguntas.push({
                                 pregunta: preguntaAPI.question,
                                 respuestaCorrecta: preguntaAPI.correct_answer,
-                                respuestasIncorrectas: preguntaAPI.incorrect_answers
+                                respuestasIncorrectas: preguntaAPI.incorrect_answers,
+                                respuestasAleatorias: [preguntaAPI.correct_answer, ...preguntaAPI.incorrect_answers].sort(desordenar)
                             });
                         });
 
-                        preguntas.forEach(pregunta => {
+                        preguntas.map(pregunta => {
                             const preguntaHTML = document.createElement("div");
                             preguntaHTML.innerHTML = `
                                 <h3>${pregunta.pregunta}</h3>
                                 <ul>
-                                    <li class="respuesta" onclick="checkPreguntas('${pregunta.respuestaCorrecta}')">${pregunta.respuestaCorrecta}</li>
-                                    ${pregunta.respuestasIncorrectas.map(respuesta => `<li class="respuesta" onclick="checkPreguntas('${respuesta}')">${respuesta}</li>`).join("")}
+                                    ${pregunta.respuestasAleatorias.map(respuesta => `<li class="respuesta" onClick="agregarRespuesta('${respuesta}')">${respuesta}</li>`).join('')}
                                 </ul>
                             `;
                             document.getElementById("preguntas").appendChild(preguntaHTML);
                         });
+
+                        document.getElementById("form").hidden = true;
                         document.getElementById("questionario").hidden = false;
                     } else {
                         document.getElementById("questionario").hidden = true;
@@ -75,8 +74,49 @@ const obtenerPreguntas = () => {
     } else {
         generarToken();
     }
+};
+
+const reset = () => {
+    document.getElementById("questionario").hidden = true;
+    document.getElementById("form").hidden = false;
+};
+
+const prueba = () => {
+    console.log(misRespuestas);
+};
+
+function checkLleno() {
+    return misRespuestas.every(elemento => {
+        return elemento !== undefined && elemento !== null;
+    });
 }
 
-function checkPreguntas(respuestaSeleccionada) {
-    console.log("Verificando respuesta seleccionada:", respuestaSeleccionada);
+const calificar = () => {
+    let puntaje = 0;
+    if (checkLleno()) {
+        misRespuestas.forEach((respuesta, indice) => {
+            console.log("respuesta: ", respuesta);
+            console.log("correcta: ", preguntas[indice].respuestaCorrecta);
+            console.log(respuesta == preguntas[indice].respuestaCorrecta);
+            if (respuesta === preguntas[indice].respuestaCorrecta) puntaje = puntaje + 100;
+            console.log(puntaje);
+        });
+        alert(`Tu puntaje es de ${puntaje} puntos`);
+    } else alert("Debes llenar todas las respuestas");
+};
+
+function actualizarEstilos(indice) {
+    const lista = document.getElementById("preguntas");
+    const children = lista.children[indice].querySelectorAll("ul li");
+
+    children.forEach(elemento => {
+        elemento.classList.remove("seleccionada");
+    });
+
+    const respuestaSeleccionada = misRespuestas[indice];
+    const elementoSeleccionado = Array.from(children).find(elemento => elemento.innerText === respuestaSeleccionada);
+
+    if (elementoSeleccionado) {
+        elementoSeleccionado.classList.add("seleccionada");
+    }
 }
