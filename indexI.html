@@ -8,10 +8,75 @@
     <link rel="stylesheet" href="./styleI.css">
 </head>
 <body>
-    <h1>hola mundo
+    <section id ="form">
+    <h1>Generador de preguntas</h1>
+    <p>Por favor selecciona las opciones correspondientes
+    </p>
 
-    </h1>
+    <form>
+        <div class="forms.group">
+            <label class="label" for="select1">Selecciona una categoria</label>
+            <select class="form-select" id="select1" aria-label="Default select example">
+                <option value="" selected>Selecciona una categoria</option>
+                <option value="9">Cultura general</option>
+                <option value="10">Libros</option>
+                <option value="11">Peliculas</option>
+                <option value="12">Musica</option>
+                <option value="13">Musicales y teatro</option>
+                <option value="14">Television</option>
+                <option value="15">Juegos de video</option>
+                <option value="16">Juegos de mesa</option>
+                <option value="17">Ciencia y naturalez</option>
+                <option value="18">Computacion </option>
+                <option value="19">Matematicas</option>
+                <option value="20">Mitologia</option>
+                <option value="21">Deportes</option>
+                <option value="22">Geografia</option>
+                <option value="23">Historia</option>
+                <option value="24">Politica</option>
+                <option value="25">Arte</option>
+                <option value="26">Celebridades</option>
+                <option value="27">Animales</option>
+                <option value="28">Vehiculos</option>
+                <option value="29">Comic</option>
+                <option value="30">Gatgets</option>
+                <option value="31">Anime y manga</option>
+                <option value="32">Cartoons</option>
     
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label class="label" for="select1">Selecciona una difucultad</label>
+            <select class="form-select" id="select2" aria-label="Default select example">
+                <option value="" selected>Selecciona una dificultad</option>
+                <option value="easy">Facil</option>
+                <option value="medium">Medio</option>
+                <option value="hard">Dificil</option>
+            </select>
+        </div>
+
+       <div class="form-group">
+        <label class="label" for="select1">Selecciona un tipo de trivia</label>
+        <select class="form-select" id="select3" aria-label="Default select example">
+            <option value="" selected>Selecciona un tipo de trivia</option>
+            <option value="boolean" selected>Falso y verdadero</option>
+            <option value="multiple" selected>multiple respuesta</option>
+        </select>
+       </div>
+
+    </form>
+    
+
+    <button type="button" class="btn btn-primary m-5" onclick="obtenerpreguntas()">Empezar</button>
+
+    <section id="questionario" hidden>
+        <section id="preguntas">
+   
+    </section>
+
+    <button type="button" class="btn btn-primary m-5" onclick="checkpreguntas()">Generar nueva trivia></button>
+     </section>
 
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
